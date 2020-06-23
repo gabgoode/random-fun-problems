@@ -1,0 +1,59 @@
+1.
+1.1 The immediate thought after reading the prompt and walking through examples:
+    - This is a graph problem, with stations as nodes and distances between any given two points as weights
+    - What is the core problem that I need to solve? I need to go through paths (using BFS, DFS, or other algorithms) and keep track of the max weight along the way.
+    - What can I reduce this problem to? What tools, known algorithms can I leverage?
+
+1.2 I first thought of using a greedy algorithm with Breadth-first search (BFS) flavor:
+
+    Algorithm:
+
+    Assuming we have a undirected graph (with start and finish as exceptions) with all the nodes and weights calculated,
+        Start from Earth, and during each iteration,
+            Choose the edge with the least weight, where the other end of the edge has not been visited, and go to that node.
+            If that node is Zearth, stop; otherwise, do above again.
+
+    However, there are counterexamples that make it not work.
+
+1.3 The second attempt is to start from brute-force approach, and see whether I can optimize in any way.
+
+    The brute-force approach is to go through all possible paths, and by the end an answer is guaranteed.
+    However, we can be clever such that we don't have to go all the way down a path as soon as we see an edge with heavy weight.
+
+    Algorithm:
+
+    Do a Depth-first search (DFS) from Earth to Zearth, and store the max weight.
+    While there is another path:
+        Start from Earth, and perform a DFS to Zearth.
+        If at any point we encounter an edge with weight bigger than the previous max weight seen, stop.
+        If we formed a new path with a smaller max weight, update.
+
+    I could also leverage data structures such as queue, adjacency lists and dynamic programming to make my life easier, but the implementation still seems quite hard.
+
+1.4 The third attempt is to think more about how I could do iterate through paths in different ways, combining theory and implementation.
+
+    There are two ways that I thought of: To iterate by path length (i.e how many nodes there are), or to iterate by keep adding one new node at a time.
+
+1.5 Another thought is what if we first compute all the edges, and sort them in increasing order.
+    We can then start from the edge with smallest weight, and keep checking out edges until a path from Earth to Zearth has formed.
+    During our searches, we can keep three collections.
+    The first stores connected components from Earth, the second stores connected components from Zearth, and the last one stores other connected components reachable from neither Earth nor Zearth.
+
+1.6 After these thoughts, I did some research online since none of them gave me a clear path in terms of implementation details.
+    I stumbled across Floyd-Warshall's algorithm, which is in a way similar to my second thought in 1.4.
+    This is the idea that my solution was built on.
+
+
+3.
+3.1 The time complexity of my solution is O(N^3), N being the number of stations.
+    There are three loops, each with linear complexity.
+    The space complexity is O(N^2), mainly the 2D distance_matrix that I am using.
+
+3.2 The complexity can definitely be improved, since the algorithm that I am using is solving a more complicated problem than this one.
+    For example, if I pursue 1.5 with priority queue, arrays, and optimize path algorithms, the complexity of time can come down to O(N^2), and the complexity of space can be O(N).
+
+
+
+
+
+
